@@ -1,5 +1,5 @@
-# Fortnite Sprite Tracker - iPhone Upload Edition
+# Fortnite Sprite Tracker v3
 
-All Sprite images are embedded inside `catalog.json`, so no image folder needs to be uploaded. Quack variants are excluded.
+This build contains all 101 sprites supplied by Seth, excludes Quack variants, and embeds a cropped image for every sprite in catalog.json.
 
-Upload the files in this folder to the root of your existing GitHub repository and replace files with matching names.
+Upload every file in this folder to the root of the GitHub Pages repository. The app header must show “v3 - 101”.

@@ -14,11 +14,18 @@ function normalizeCatalog(data){
 }
 async function init(){
  state.progress=safeParse(localStorage.getItem(STORAGE.progress),{});
- const stored=safeParse(localStorage.getItem(STORAGE.catalog),null);
- if(stored){state.catalog=normalizeCatalog(stored)}else{state.catalog=normalizeCatalog(await fetch('catalog.json').then(r=>r.json()));save()}
+ // Always load the catalog shipped with this app version first. This prevents an
+ // older 10-item catalog saved by a previous installation from overriding updates.
+ const bundled=normalizeCatalog(await fetch('catalog.json?v=2026-07-30-v3',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(`Catalog HTTP ${r.status}`);return r.json()}));
+ const storedRaw=safeParse(localStorage.getItem(STORAGE.catalog),null);
+ const stored=storedRaw?normalizeCatalog(storedRaw):null;
+ state.catalog=(!stored||stored.catalogVersion!==bundled.catalogVersion||stored.sprites.length<bundled.sprites.length)?bundled:stored;
+ save();
  $('#catalogUrl').value=localStorage.getItem(STORAGE.url)||'';
  bind();render();
- if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+ if('serviceWorker' in navigator){
+   navigator.serviceWorker.register('service-worker.js?v=3').catch(()=>{});
+ }
 }
 function bind(){
  $('#search').addEventListener('input',e=>{state.query=e.target.value.toLowerCase();render()});
