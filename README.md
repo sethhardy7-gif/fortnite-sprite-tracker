@@ -1,5 +1,3 @@
-# Fortnite Sprite Tracker v3
+# Fortnite Sprite Tracker v6
 
-This build contains all 101 sprites supplied by Seth, excludes Quack variants, and embeds a cropped image for every sprite in catalog.json.
-
-Upload every file in this folder to the root of the GitHub Pages repository. The app header must show “v3 - 101”.
+Corrects the supplied Batman, Earth, Zero Point, and Grim artwork while retaining the 107-sprite catalog and all prior fixes. Upload all eight files to the repository root and replace the existing versions.
