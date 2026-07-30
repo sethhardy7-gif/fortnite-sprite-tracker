@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#15182b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Sprite Tracker" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Fortnite Sprite Tracker</title>
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">FORTNITE COLLECTION</p>
+      <h1>Sprite Tracker</h1>
+    </div>
+    <button id="settingsBtn" class="icon-btn" aria-label="Open data and update settings">⚙︎</button>
+  </header>
+
+  <main>
+    <section class="stats" aria-label="Progress">
+      <article><strong id="collectedStat">0 / 0</strong><span>Collected</span><div class="bar"><i id="collectedBar"></i></div></article>
+      <article><strong id="masteredStat">0 / 0</strong><span>Mastered</span><div class="bar"><i id="masteredBar"></i></div></article>
+    </section>
+
+    <section class="controls">
+      <input id="search" type="search" placeholder="Search sprites…" autocomplete="off" />
+      <select id="themeFilter" aria-label="Filter by theme"><option value="all">All themes</option></select>
+      <div class="segmented" role="group" aria-label="Collection filter">
+        <button data-filter="all" class="active">All</button>
+        <button data-filter="collected">Collected</button>
+        <button data-filter="missing">Missing</button>
+        <button data-filter="mastered">Mastered</button>
+      </div>
+    </section>
+
+    <section id="catalogNotice" class="notice" hidden></section>
+    <section id="spriteGrid" class="grid" aria-live="polite"></section>
+    <p id="emptyState" class="empty" hidden>No sprites match this view.</p>
+  </main>
+
+  <dialog id="settingsDialog">
+    <form method="dialog" class="dialog-shell">
+      <div class="dialog-head"><h2>Catalog & backup</h2><button value="cancel" class="icon-btn" aria-label="Close">×</button></div>
+      <p class="muted">Catalog updates merge by sprite ID, so collected and mastered progress is preserved.</p>
+
+      <label>Catalog update URL
+        <input id="catalogUrl" type="url" placeholder="https://example.com/catalog.json" />
+      </label>
+      <div class="row"><button type="button" id="saveUrlBtn">Save URL</button><button type="button" id="checkUpdateBtn" class="primary">Check for updates</button></div>
+      <p id="updateMessage" class="message"></p>
+
+      <hr />
+      <h3>Add a sprite manually</h3>
+      <div class="two-col">
+        <label>Name<input id="newName" type="text" placeholder="Sprite name" /></label>
+        <label>Theme<input id="newTheme" type="text" placeholder="Theme or family" /></label>
+      </div>
+      <div class="two-col">
+        <label>Variant<select id="newVariant"><option>Base</option><option>Gold</option><option>Gummy</option><option>Galaxy</option><option>Other</option></select></label>
+        <label>Rarity<input id="newRarity" type="text" placeholder="Optional" /></label>
+      </div>
+      <button type="button" id="addSpriteBtn">Add sprite</button>
+
+      <hr />
+      <h3>Import or export</h3>
+      <div class="row wrap"><button type="button" id="exportProgressBtn">Export progress</button><button type="button" id="exportCatalogBtn">Export catalog</button><label class="file-btn">Import JSON<input id="importFile" type="file" accept="application/json" /></label></div>
+      <button type="button" id="resetBtn" class="danger">Reset all progress</button>
+      <p class="footnote">For automatic updates, host a catalog JSON file at a stable HTTPS address, then paste that address above. Replace that remote file whenever Epic adds sprites.</p>
+    </form>
+  </dialog>
+
+  <template id="cardTemplate">
+    <article class="card">
+      <div class="avatar" aria-hidden="true"></div>
+      <div class="card-copy"><h2></h2><p></p></div>
+      <div class="checks">
+        <label><input class="collected" type="checkbox" /><span>Collected</span></label>
+        <label><input class="mastered" type="checkbox" /><span>Mastered</span></label>
+      </div>
+      <button class="delete-btn" aria-label="Delete custom sprite" hidden>×</button>
+    </article>
+  </template>
+  <script src="app.js"></script>
+</body>
+</html>
