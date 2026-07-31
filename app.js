@@ -16,7 +16,7 @@ async function init(){
  state.progress=safeParse(localStorage.getItem(STORAGE.progress),{});
  // Always load the catalog shipped with this app version first. This prevents an
  // older 10-item catalog saved by a previous installation from overriding updates.
- const bundled=normalizeCatalog(await fetch('catalog.json?v=2026-07-30-v7',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(`Catalog HTTP ${r.status}`);return r.json()}));
+ const bundled=normalizeCatalog(await fetch('catalog.json?v=2026-07-30-v8',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(`Catalog HTTP ${r.status}`);return r.json()}));
  const storedRaw=safeParse(localStorage.getItem(STORAGE.catalog),null);
  const stored=storedRaw?normalizeCatalog(storedRaw):null;
  state.catalog=(!stored||stored.catalogVersion!==bundled.catalogVersion||stored.sprites.length<bundled.sprites.length)?bundled:stored;
@@ -24,7 +24,7 @@ async function init(){
  $('#catalogUrl').value=localStorage.getItem(STORAGE.url)||'';
  bind();render();
  if('serviceWorker' in navigator){
-   navigator.serviceWorker.register('service-worker.js?v=7').catch(()=>{});
+   navigator.serviceWorker.register('service-worker.js?v=8').catch(()=>{});
  }
 }
 function bind(){
@@ -46,7 +46,17 @@ function render(){
  const collected=sprites.filter(s=>state.progress[s.id]?.collected).length,mastered=sprites.filter(s=>state.progress[s.id]?.mastered).length,total=sprites.length;
  $('#collectedStat').textContent=`${collected} / ${total}`;$('#masteredStat').textContent=`${mastered} / ${total}`;$('#collectedBar').style.width=total?`${collected/total*100}%`:'0';$('#masteredBar').style.width=total?`${mastered/total*100}%`:'0';
  const notice=$('#catalogNotice');notice.hidden=false;notice.textContent=`Catalog ${state.catalog.catalogVersion} • updated ${state.catalog.updated}. ${state.catalog.source}`;
- const visible=sprites.filter(s=>{const p=state.progress[s.id]||{};const text=`${s.name} ${s.theme} ${s.variant} ${s.rarity}`.toLowerCase();return text.includes(state.query)&&(state.theme==='all'||s.theme===state.theme)&&(state.filter==='all'||state.filter==='collected'&&p.collected||state.filter==='missing'&&!p.collected||state.filter==='mastered'&&p.mastered)});
+ const visible=sprites.filter(s=>{
+  const p=state.progress[s.id]||{};
+  const text=`${s.name} ${s.theme} ${s.variant} ${s.rarity}`.toLowerCase();
+  const matchesStatus=
+   state.filter==='all'||
+   (state.filter==='collected'&&!!p.collected)||
+   (state.filter==='missing'&&!p.collected)||
+   (state.filter==='mastered'&&!!p.mastered)||
+   (state.filter==='unmastered'&&!p.mastered);
+  return text.includes(state.query)&&(state.theme==='all'||s.theme===state.theme)&&matchesStatus;
+ });
  grid.innerHTML='';visible.forEach(s=>grid.append(card(s)));$('#emptyState').hidden=visible.length>0;
 }
 function card(s){

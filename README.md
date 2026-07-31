@@ -1,10 +1,10 @@
-# Fortnite Sprite Tracker v7
+# Fortnite Sprite Tracker v8
 
-Corrected 107-entry catalog for personal use.
+107-entry personal Sprite catalog.
 
-- Includes Base Earth Sprite and all five Peely variants.
-- Excludes all Quack variants.
-- Uses the user-confirmed images for Galaxy Fishy, Galaxy Air, Holofoil Water, Batman corrections, Earth, Zero Point, Grim variants, Peely variants, and all five standalone Mythic sprites.
-- Preserves collected/mastered progress because sprite IDs are unchanged.
+Changes in v8:
+- Adds **Mastered** and **Not mastered** catalog filters.
+- Keeps all existing Sprite IDs, images, and collected/mastered progress compatible with v7.
+- Updates the service-worker cache so GitHub Pages users receive the new interface.
 
-Upload all app files to the root of your GitHub Pages repository, replacing the existing files.
+Upload all eight files to the root of the existing GitHub Pages repository, replacing the prior files. Friends using the same site URL receive the update from the same repository; their progress remains stored separately on their own devices.
